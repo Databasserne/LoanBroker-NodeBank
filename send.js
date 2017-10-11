@@ -20,12 +20,14 @@ module.exports = {
 }
 
 module.exports = {
-    replyTo: function(msg, interest) {
+    replyTo: function(msg, interest, replyChannel) {
         amqp.connect("amqp://datdb.cphbusiness.dk", function(err, conn) {
             conn.createChannel(function(err, ch) {
                 
-                ch.sendToQueue(msg.properties.replyTo,
-                    new Buffer(interest.toString()));
+				var data = JSON.stringify({"SSN": msg.SSN, "interest": interest });
+				console.log(data.toString());
+                ch.sendToQueue(replyChannel,
+                    new Buffer(data.toString()));
             });
         });
     }
