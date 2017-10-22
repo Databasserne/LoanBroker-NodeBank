@@ -23,11 +23,14 @@ module.exports = {
     replyTo: function(msg, interest, replyChannel) {
         amqp.connect("amqp://datdb.cphbusiness.dk", function(err, conn) {
             conn.createChannel(function(err, ch) {
+				var corrID = "BankNODE";
                 
-				var data = JSON.stringify({"SSN": msg.SSN, "interest": interest });
+				var data = JSON.stringify({"ssn": msg.SSN, "interestRate": interest });
 				console.log(data.toString());
+				console.log("Reply to", replyChannel);
                 ch.sendToQueue(replyChannel,
-                    new Buffer(data.toString()));
+                    Buffer.from(data.toString()),
+					{ correlationId: corrID });
             });
         });
     }

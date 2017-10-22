@@ -9,7 +9,7 @@ receive.receive(function(msg) {
 
     var r = R/100.0;
     var interest = data.loanAmount * r * data.loanDuration;
-
+	
     send.replyTo(data, R, replyToChannel);
 
 });
